@@ -1,5 +1,5 @@
-video_stream:
-  web:
+services:
+  video_stream:
     build: .
     container_name: video_stream
     volumes:
