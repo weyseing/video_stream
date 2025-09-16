@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>CCTV Video Stream</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f0f0;
+        }
+        .container {
+            text-align: center;
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        h1 {
+            margin-bottom: 20px;
+        }
+        #video-feed {
+            border: 1px solid #ccc;
+            background-color: black;
+            max-width: 100%;
+            height: auto;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Live CCTV Feed</h1>
+        <img id="video-feed" alt="Live Video Feed" style="display: none;" />
+    </div>
+
+    <script>
+        const videoFeed = document.getElementById('video-feed');
+        const websocketUrl = 'ws://' + window.location.host + '/ws/stream/';
+        let socket;
+        let firstFrameReceived = false;
+
+        function connectWebSocket() {
+            console.log('Attempting to connect to WebSocket...');
+            socket = new WebSocket(websocketUrl);
+
+            socket.onopen = function(e) {
+                console.log('WebSocket connection opened.');
+            };
+
+            socket.onmessage = function(event) {
+                if (!firstFrameReceived) {
+                    videoFeed.style.display = 'block';
+                    firstFrameReceived = true;
+                }
+
+                const url = URL.createObjectURL(new Blob([event.data], { type: 'image/jpeg' }));
+                videoFeed.src = url;
+            };
+
+            socket.onclose = function(e) {
+                console.error('WebSocket connection closed unexpectedly:', e);
+                firstFrameReceived = false; // Reset flag on disconnect
+                setTimeout(connectWebSocket, 5000); // Retry connection
+            };
+
+            socket.onerror = function(err) {
+                console.error('WebSocket encountered an error:', err);
+                socket.close();
+            };
+        }
+
+        connectWebSocket();
+    </script>
+</body>
+</html>

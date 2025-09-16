@@ -19,4 +19,5 @@ from django.urls import path, include
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('healthcheck/', include("healthcheck.urls")),
+    path('livestreaming/', include('livestreaming.urls')),
 ]

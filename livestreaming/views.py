@@ -1,3 +1,4 @@
 from django.shortcuts import render
 
-# Create your views here.
+def video_stream_view(request):
+    return render(request, 'livestreaming/video_stream.html') 
