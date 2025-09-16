@@ -1,7 +1,8 @@
 # Setup
 - **Copy `.env.example` to `.env` & fill up env below**
 ```properties
-RTSP_URL=
+# if you have your own RTSP URL
+RTSP_URL= 
 ```
 
 # Setup `Settings.py`
