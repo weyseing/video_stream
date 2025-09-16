@@ -1,0 +1,16 @@
+video_stream:
+  web:
+    build: .
+    container_name: video_stream
+    volumes:
+      - .:/app
+    env_file:
+      - .env
+    ports:
+      - "8000:8000"
+    networks:
+      global-net:
+
+networks:
+  global-net:
+    external: true
